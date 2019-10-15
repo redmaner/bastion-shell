@@ -11,23 +11,23 @@ var (
 
 func main() {
 
-	// Get SSH connections file
-	sshConnectionsFile, ok := os.LookupEnv("BASTION_SSH_CONNECTIONS")
+	// Get SSH hostsfile
+	sshHostsFile, ok := os.LookupEnv("BASTION_SSH_HOSTS")
 	if !ok {
-		log.Fatalf("Please set the BASTION_SSH_CONNECTIONS environment variable")
+		log.Fatalf("Please set the BASTION_SSH_HOSTS environment variable")
 	}
 
 	// get SSH global user
 	sshGlobalUser, _ := os.LookupEnv("BASTION_GLOBAL_USER")
 	globalUser = sshGlobalUser
 
-	sshConnections, err := getSSHConnections(sshConnectionsFile)
+	sshConnections, err := getHosts(sshHostsFile)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	for {
-		err = sshConnections.selectConn()
+		err = sshConnections.selectHost()
 		if err != nil {
 			log.Fatal(err)
 		}
